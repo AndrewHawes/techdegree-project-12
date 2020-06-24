@@ -27,6 +27,9 @@ or deny the person asking to join.
     - `python manage.py migrate`
 6. Load the example data to test functionality.
     - `python manage.py loaddata exampledata.json`
+7. Run the project.
+    - `manage.py runserver`
+    - Go to [127.0.0.1:8000](127.0.0.1:8000) in your browser.
 
 The example data loads multiple user accounts.
 Use the following to log into an administrator account with a completed
