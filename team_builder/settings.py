@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'jquery',
     'djangoformsetjs',
     'imageutils',
-    # 'django_extensions',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
