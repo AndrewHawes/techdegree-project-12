@@ -56,9 +56,9 @@
           data-position="{{ position.title }}"
           data-skills="{{ position.skills }}")
             %td
-              %a(href="{% url 'project' position.project.id %}")= position.project.title
+              %a.h6(href="{% url 'project' position.project.id %}")= position.project.title
             %td
-              %a(href="{% url 'project' position.project.id %}")= position.title
+              %a.text-muted(href="{% url 'project' position.project.id %}")= position.title
     
     / My Projects
     %table.table#my-projects(style="display: none;")
@@ -73,6 +73,6 @@
           data-position="{{ position.title }}"
           data-skills="{{ position.skills }}")
             %td
-              %a(href="{% url 'project' position.project.id %}")= position.project.title
+              %a.h6(href="{% url 'project' position.project.id %}")= position.project.title
             %td
-              %a(href="{% url 'project' position.project.id %}")= position.title
+              %a.text-muted(href="{% url 'project' position.project.id %}")= position.title

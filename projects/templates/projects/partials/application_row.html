@@ -1,7 +1,6 @@
 <td>
-  <a href="#" class="h4">{{ application.applicant.profile.display_name }}</a>
-  <a href="{% url 'project' application.position.project.id %}" class="d-block">{{ application.position.project }}</a>
-  <div class="title"></div>
+  <a href="#" class="h5">{{ application.applicant.profile.display_name }}</a>
+  <a href="{% url 'project' application.position.project.id %}" class="d-block">{{ application.position.project.title }}</a>
 </td>
 <td class="align-middle">
   <a href="#" class="text-muted">{{ application.position.title }}</a>

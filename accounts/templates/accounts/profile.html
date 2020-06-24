@@ -56,8 +56,8 @@
                   <tbody>
                     {% for position in positions %}
                       <tr>
-                        <td><a href="{% url 'project' position.project.id %}">{{ position.project.title }}</a></td>
-                        <td><a href="{% url 'project' position.project.id %}">{{ position.title }}</a></td>
+                        <td><a href="{% url 'project' position.project.id %}" class="h6">{{ position.project.title }}</a></td>
+                        <td><a href="{% url 'project' position.project.id %}" class="text-muted">{{ position.title }}</a></td>
                       </tr>
                     {% endfor %}
                   </tbody>
@@ -81,14 +81,14 @@
               <tbody>
                 {% for application in profile.user.applications.all %}
                   <tr>
-                    <td><a href="{% url 'project' application.position.project.id %}">{{ application.position.project.title }}</a></td>
-                    <td><a href="{% url 'project' application.position.project.id %}">{{ application.position.title }}</a></td>
+                    <td><a href="{% url 'project' application.position.project.id %}" class="h6">{{ application.position.project.title }}</a></td>
+                    <td><a href="{% url 'project' application.position.project.id %}" class="text-muted">{{ application.position.title }}</a></td>
                     <td>{% if application.accepted %}
                         <a href="{% url 'project' application.position.project.id %}" class="btn btn-success">Accepted</a>
                       {% elif application.accepted == False %}
                         <a href="{% url 'project' application.position.project.id %}" class="btn btn-danger disabled">Rejected</a>
                       {% else %}
-                        <a href="{% url 'project' application.position.project.id %}">Unknown</a>
+                        <a href="{% url 'project' application.position.project.id %}" class="text-muted">Unknown</a>
                       {% endif %}</td>
                   </tr>
                 {% endfor %}

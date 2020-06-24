@@ -49,9 +49,9 @@
                     - for position in positions
                       %tr
                         %td<
-                          %a(href="{% url 'project' position.project.id %}")= position.project.title
+                          %a.h6(href="{% url 'project' position.project.id %}")= position.project.title
                         %td<
-                          %a(href="{% url 'project' position.project.id %}")= position.title
+                          %a.text-muted(href="{% url 'project' position.project.id %}")= position.title
         / User's applications
         - if profile.user == request.user
           %h2.mt-5 Current Applications
@@ -66,16 +66,16 @@
                 - for application in profile.user.applications.all
                   %tr
                     %td<
-                      %a(href="{% url 'project' application.position.project.id %}")= application.position.project.title
+                      %a.h6(href="{% url 'project' application.position.project.id %}")= application.position.project.title
                     %td<
-                      %a(href="{% url 'project' application.position.project.id %}")= application.position.title
+                      %a.text-muted(href="{% url 'project' application.position.project.id %}")= application.position.title
                     %td<
                       - if application.accepted
                         %a.btn.btn-success(href="{% url 'project' application.position.project.id %}") Accepted
                       - elif application.accepted == False
                         %a.btn.btn-danger.disabled(href="{% url 'project' application.position.project.id %}") Rejected
                       - else
-                        %a(href="{% url 'project' application.position.project.id %}") Unknown
+                        %a.text-muted(href="{% url 'project' application.position.project.id %}") Unknown
           - else
             %p You haven't submitted any applications.
       .col.offset-1

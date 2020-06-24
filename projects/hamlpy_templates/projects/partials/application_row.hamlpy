@@ -1,8 +1,7 @@
 %td
-  %a.h4(href='#')= application.applicant.profile.display_name
+  %a.h5(href='#')= application.applicant.profile.display_name
   %a.d-block(href="{% url 'project' application.position.project.id %}")<
-    = application.position.project
-  .title
+    = application.position.project.title
 %td.align-middle
   %a.text-muted(href='#')= application.position.title
 %td.align-middle.text-center

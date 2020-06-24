@@ -48,10 +48,10 @@
         {% for position in positions %}
           <tr data-id="{{ position.id }}" data-position="{{ position.title }}" data-skills="{{ position.skills }}" class="js-position-row">
             <td>
-              <a href="{% url 'project' position.project.id %}">{{ position.project.title }}</a>
+              <a href="{% url 'project' position.project.id %}" class="h6">{{ position.project.title }}</a>
             </td>
             <td>
-              <a href="{% url 'project' position.project.id %}">{{ position.title }}</a>
+              <a href="{% url 'project' position.project.id %}" class="text-muted">{{ position.title }}</a>
 
             </td>
           </tr>
@@ -70,10 +70,10 @@
         {% for position in my_positions %}
           <tr data-id="{{ position.id }}" data-position="{{ position.title }}" data-skills="{{ position.skills }}" class="js-position-row">
             <td>
-              <a href="{% url 'project' position.project.id %}">{{ position.project.title }}</a>
+              <a href="{% url 'project' position.project.id %}" class="h6">{{ position.project.title }}</a>
             </td>
             <td>
-              <a href="{% url 'project' position.project.id %}">{{ position.title }}</a>
+              <a href="{% url 'project' position.project.id %}" class="text-muted">{{ position.title }}</a>
             </td>
           </tr>
         {% endfor %}
