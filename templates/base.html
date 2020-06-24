@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>{% block title %}
+        Team Builder
+
+      {% endblock %}</title>
+<!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap/bootstrap.min.css' %}">
+
+<!-- Font Awesome -->
+    <link rel="stylesheet" href="{% static 'css/all.min.css' %}">
+
+<!-- jQuery Editable Select -->
+    <link rel="stylesheet" href="{% static 'css/jquery-editable-select.min.css' %}">
+
+<!-- Cropper -->
+    <link href="{% static 'imageutils/css/cropper.min.css' %}" rel="stylesheet">
+
+    {% block css %}
+
+    {% endblock %}
+
+<!-- Global CSS -->
+    <link rel="stylesheet" href="{% static 'css/global.css' %}">
+
+  </head>
+  <body class="mb-5">
+<!-- NavBar -->
+    <nav class="navbar navbar-expand navbar-dark bg-primary px-0 py-4">
+      <div class="container navbar-nav">
+        <a href="{% url 'index' %}" class="nav-link">
+          <i class="fas fa-home fa-lg"></i>
+        </a>
+        <form method="get" action="{% url 'search' %}" class="my-auto mx-4 d-inline w-100">
+          <div class="input-group input-group-lg">
+            <input type="search" name="q" placeholder="Search projects..." class="form-control border border-right-0">
+            <span class="input-group-append">
+              <button class="btn btn-outline-secondary border border-left-0">
+                <i class="fas fa-search"></i>
+              </button>
+            </span>
+          </div>
+        </form>
+        {% if user.is_authenticated %}
+          <a href="{% url 'profile' %}" class="nav-link text-nowrap">Profile</a>
+          <a href="{% url 'signout' %}" class="nav-link text-nowrap ml-2">Sign Out</a>
+        {% else %}
+          <a href="{% url 'signin' %}" class="nav-link text-nowrap">Sign In</a>
+          <a href="{% url 'signup' %}" class="nav-link text-nowrap ml-2">Register</a>
+        {% endif %}
+      </div>
+    </nav>
+    {% include 'partials/messages.html' %}
+    {% block content %}
+    {% endblock %}
+<!-- jQuery 3.4.1 -->
+    <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/jquery-editable-select.min.js' %}"></script>
+    <script src="{% static 'js/showdown.min.js' %}"></script>
+    <script src="{% static 'js/autogrow.js' %}"></script>
+    <script src="{% static 'js/app/ajax-csrf-setup.js' %}"></script>
+    {% block javascript %}
+    {% endblock %}
+  </body>
+</html>

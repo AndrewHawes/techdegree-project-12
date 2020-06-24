@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container-fluid px-0 py-4">
+    <div class="row">
+      <div class="col-2 offset-5">
+        <h3 class="mb-4">Sign In</h3>
+        {% if form.errors %}
+          <p class="text-danger">Username and password didn't match.</p>
+        {% endif %}
+        <form method="post">
+          {% csrf_token %}
+          <div class="form-group">
+            <input type="email" name="username" id="id_username" placeholder="Email Address"
+                   class="form-control form-control-lg" autofocus required/>
+          </div>
+          <div class="form-group">
+            <input type="password" name="password" id="id_password" placeholder="Password"
+                   class="form-control form-control-lg" required/>
+          </div>
+          <button type="submit" class="btn btn-lg btn-primary mr-3">Sign In</button>
+          <a class="btn btn-lg btn-outline-primary text-decoration-none" href="{% url 'signup' %}">Sign Up</a>
+        </form>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

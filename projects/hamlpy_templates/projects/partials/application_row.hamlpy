@@ -1,0 +1,19 @@
+%td
+  %a.h4(href='#')= application.applicant.profile.display_name
+  %a.d-block(href="{% url 'project' application.position.project.id %}")<
+    = application.position.project
+  .title
+%td.align-middle
+  %a.text-muted(href='#')= application.position.title
+%td.align-middle.text-center
+  - if application.accepted is None
+    %a.btn.btn-sm.btn-success.js-btn-accept.font-weight-bold(data-id="{{ application.id }}")<
+      Accept
+    %a.btn.btn-sm.btn-danger.js-btn-reject.font-weight-bold(data-id="{{ application.id }}")<
+      Reject
+  - elif application.accepted
+    %a.btn.btn-sm.btn-success.js-btn-accept.font-weight-bold.disabled.d-block(
+      data-id="{{ application.id }}") Accepted
+  - else
+    %a.btn.btn-sm.btn-danger.js-btn-reject.font-weight-bold.disabled.d-block(
+      data-id="{{ application.id }}") Rejected

@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% block title %}
+  Profile
+{% endblock %}
+{% block content %}
+
+<!-- Navigation Buttons -->
+<!-- Check if user is viewing their own profile -->
+  {% if profile.user == request.user %}
+    <div class="container-fluid px-0 py-4 bg-light">
+      <div class="container">
+        <nav class="nav nav-pills">
+          <a href="{% url 'applications' %}" class="nav-item nav-link text-dark font-weight-bold rounded-pill">Applications</a>
+          <a href="{% url 'profile' %}" class="nav-item nav-link bg-dark font-weight-bold rounded-pill active">Profile</a>
+
+        </nav>
+      </div>
+    </div>
+  {% endif %}
+  <main class="container mt-4">
+
+<!-- Header and Edit Button -->
+    <div class="row">
+      <div class="col">
+        <h2 class="mb-5">Profile</h2>
+      </div>
+<!-- Check if user is viewing their own profile -->
+      {% if profile.user == request.user %}
+        <div class="col">
+          <a href="{% url 'profile_edit' %}" class="btn btn-outline-primary btn-lg float-right font-weight bold">Edit</a>
+        </div>
+      {% endif %}
+    </div>
+    <div class="row">
+      <div class="col-8">
+
+<!-- Name and Description -->
+        <section class="mb-5">
+          <h1>{{ profile.name }}</h1>
+          <div>
+            {{ profile.get_about|safe }}
+
+          </div>
+        </section>
+<!-- Past Projects -->
+        <section>
+          {% with positions=profile.user.positions.all %}
+            {% if positions %}
+              <h2>Past and Current Positions</h2>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col" class="border-top-0">Project</th>
+                    <th scope="col" class="border-top-0">Position</th>
+                  </tr>
+                  <tbody>
+                    {% for position in positions %}
+                      <tr>
+                        <td><a href="{% url 'project' position.project.id %}">{{ position.project.title }}</a></td>
+                        <td><a href="{% url 'project' position.project.id %}">{{ position.title }}</a></td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </thead>
+              </table>
+            {% endif %}
+          {% endwith %}
+        </section>
+<!-- User's applications -->
+        {% if profile.user == request.user %}
+          <h2 class="mt-5">Current Applications</h2>
+          {% if profile.user.applications %}
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col" class="border-top-0">Project</th>
+                  <th scope="col" class="border-top-0">Position</th>
+                  <th scope="col" class="border-top-0">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for application in profile.user.applications.all %}
+                  <tr>
+                    <td><a href="{% url 'project' application.position.project.id %}">{{ application.position.project.title }}</a></td>
+                    <td><a href="{% url 'project' application.position.project.id %}">{{ application.position.title }}</a></td>
+                    <td>{% if application.accepted %}
+                        <a href="{% url 'project' application.position.project.id %}" class="btn btn-success">Accepted</a>
+                      {% elif application.accepted == False %}
+                        <a href="{% url 'project' application.position.project.id %}" class="btn btn-danger disabled">Rejected</a>
+                      {% else %}
+                        <a href="{% url 'project' application.position.project.id %}">Unknown</a>
+                      {% endif %}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          {% else %}
+            <p>You haven't submitted any applications.</p>
+          {% endif %}
+        {% endif %}
+      </div>
+      <div class="col offset-1">
+
+<!-- User Avatar -->
+        {% if profile.avatar %}
+          <img src="{{ profile.avatar.url }}" alt="{{ profile.name }}'s avatar" class="w-100">
+        {% else %}
+          <div class="g-img-placeholder mb-5"></div>
+        {% endif %}
+<!-- Skills -->
+        <div class="mt-5">
+          <h5><small class="text-muted">Skills</small></h5>
+          {% if profile.skills.all %}
+            <ul>
+              {% for skill in profile.skills.all %}
+                <li class="mt-2">{{ skill.name }}</li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p class="mt-2">No skills currently listed.</p>
+
+          {% endif %}
+        </div>
+<!-- User Projects -->
+        <div class="mt-5">
+          <h5>{% if profile.user == request.user %}
+              <small class="text-muted">My Projects</small>
+            {% else %}
+              <small class="text-muted">{{ profile.name }}'s Projects</small>
+            {% endif %}</h5>
+          {% if profile.user.owned_projects %}
+            <ul>
+              {% for project in profile.user.owned_projects.all %}
+                <li class="mt-2"><a href="{% url 'project' project.id %}">{{ project.title }}</a></li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p class="mt-2">You haven't started any projects.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </main>
+{% endblock %}
+

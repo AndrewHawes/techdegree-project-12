@@ -1,0 +1,18 @@
+<td>
+  <a href="#" class="h4">{{ application.applicant.profile.name }}</a>
+  <a href="{% url 'project' application.position.project.id %}" class="d-block">{{ application.position.project }}</a>
+  <div class="title"></div>
+</td>
+<td class="align-middle">
+  <a href="#" class="text-muted">{{ application.position.title }}</a>
+</td>
+<td class="align-middle text-center">
+  {% if application.accepted is None %}
+    <a data-id="{{ application.id }}" class="btn btn-sm btn-success js-btn-accept font-weight-bold">Accept</a>
+    <a data-id="{{ application.id }}" class="btn btn-sm btn-danger js-btn-reject font-weight-bold">Reject</a>
+  {% elif application.accepted %}
+    <a data-id="{{ application.id }}" class="btn btn-sm btn-success js-btn-accept font-weight-bold disabled d-block">Accepted</a>
+  {% else %}
+    <a data-id="{{ application.id }}" class="btn btn-sm btn-danger js-btn-reject font-weight-bold disabled d-block">Rejected</a>
+  {% endif %}
+</td>

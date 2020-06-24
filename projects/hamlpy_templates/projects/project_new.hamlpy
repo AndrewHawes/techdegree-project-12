@@ -1,0 +1,97 @@
+- extends 'base.html'
+- load project_extras
+- load formset_tags
+- block title
+  New Project
+
+- block content
+  = block.super
+  %form(method='post')
+    - csrf_token
+    = formset.management_form
+    .container-fluid.px-0.py-4.bg-light
+      .container
+        %button.btn.btn-lg.btn-outline-primary.font-weight-bold(type='submit')<
+          Save Project
+        %a.btn.btn-lg.btn-link.text-decoration-none.ml-2.font-weight.bold(
+          href="{% url 'index' %}") Discard
+    
+    %main.container.px-0.mt-5
+      .row
+        / Project Details
+        .col-8
+          - field form.title
+          - field form.description
+          
+          / Position Details
+          %h2.mt-5 Positions
+          -#%hr
+          #formset(data-formset-prefix="{{ formset.prefix }}")
+            = formset.management_form
+            = formset.media
+            - if formset.non_form_errors
+              .invalid-feedback.d-block
+                = formset.non_form_errors
+            
+            / Position Formset Body
+            %div(data-formset-body)
+              - if user.profile.using_markdown
+                %p.text-info.mb-3 Markdown syntax is allowed in position descriptions.
+              - else
+                %p.text-muted.mb-3<
+                  Markdown is currently disabled. You can enable it on your
+                  %a(href="{% url 'profile_edit' %}")>
+                    edit profile
+                  page.
+              - for form in formset
+                %div.card.my-3(data-formset-form)
+                  .card-body
+                    - field form.title
+                    - field form.description
+                    - field form.skills show_label=True
+                    - field form.time_commitment
+                    - for hidden in form.hidden_fields
+                      = hidden
+                    .text-right
+                      %div(hidden)<
+                        = form.DELETE
+                      %input.btn.btn-sm.btn-danger(type='button' value='Remove' data-formset-delete-button)
+            
+            %script(type='form-template' data-formset-empty-form)
+              - escapescript
+                %div.card.my-3(data-formset-form)
+                  .card-body
+                    - field formset.empty_form.title
+                    - field formset.empty_form.description
+                    - field formset.empty_form.skills show_label=True
+                    - field formset.empty_form.time_commitment
+                    - for hidden in formset.empty_form.hidden_fields
+                      = hidden
+                    .text-right
+                      %div(hidden)<
+                        = formset.empty_form.DELETE
+                      %button.btn.btn-sm.btn-danger(type='button' data-formset-delete-button) Remove
+              - endescapescript
+            .text-center
+              %button.btn.btn-outline-primary.mt-3(type='button' data-formset-add) Add Another Position
+            
+            %script
+              :plain
+                jQuery(function($) {
+                  $("#formset").formset({
+                    animateForms: true,
+                    reorderMode: "dom",
+                  });
+                });
+                
+        / Timeline
+        .col.offset-1
+          %h5.mb-3<
+            %small.text-muted Project Timeline
+          - field form.timeline
+          
+          / Applicant Requirements
+          %h5.mb-3<
+            %small.text-muted Applicant Requirements
+          - field form.applicant_requirements
+          

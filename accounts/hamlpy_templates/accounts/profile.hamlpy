@@ -1,0 +1,113 @@
+- extends 'base.html'
+- block title
+  Profile
+- block content
+  
+  / Navigation Buttons
+  / Check if user is viewing their own profile
+  - if profile.user == request.user
+    .container-fluid.px-0.py-4.bg-light
+      .container
+        %nav.nav.nav-pills
+          %a.nav-item.nav-link.text-dark.font-weight-bold.rounded-pill(
+            href="{% url 'applications' %}") Applications
+          %a.nav-item.nav-link.bg-dark.font-weight-bold.rounded-pill.active(
+            href="{% url 'profile' %}") Profile
+  
+  %main.container.mt-4
+    
+    / Header and Edit Button
+    .row
+      .col
+        %h2.mb-5 Profile
+      / Check if user is viewing their own profile
+      - if profile.user == request.user
+        .col
+          %a.btn.btn-outline-primary.btn-lg.float-right.font-weight.bold(href="{% url 'profile_edit' %}")<
+            Edit
+    
+    .row
+      .col-8
+        
+        / Name and Description
+        %section.mb-5
+          %h1= profile.name
+          %div
+            = profile.get_about|safe
+        
+        / Past Projects
+        %section
+          - with positions=profile.user.positions.all
+            - if positions
+              %h2 Past and Current Positions
+              %table.table
+                %thead
+                  %tr
+                    %th.border-top-0(scope='col') Project
+                    %th.border-top-0(scope='col') Position
+                  %tbody
+                    - for position in positions
+                      %tr
+                        %td<
+                          %a(href="{% url 'project' position.project.id %}")= position.project.title
+                        %td<
+                          %a(href="{% url 'project' position.project.id %}")= position.title
+        / User's applications
+        - if profile.user == request.user
+          %h2.mt-5 Current Applications
+          - if profile.user.applications
+            %table.table
+              %thead
+                %tr
+                  %th.border-top-0(scope='col') Project
+                  %th.border-top-0(scope='col') Position
+                  %th.border-top-0(scope='col') Status
+              %tbody
+                - for application in profile.user.applications.all
+                  %tr
+                    %td<
+                      %a(href="{% url 'project' application.position.project.id %}")= application.position.project.title
+                    %td<
+                      %a(href="{% url 'project' application.position.project.id %}")= application.position.title
+                    %td<
+                      - if application.accepted
+                        %a.btn.btn-success(href="{% url 'project' application.position.project.id %}") Accepted
+                      - elif application.accepted == False
+                        %a.btn.btn-danger.disabled(href="{% url 'project' application.position.project.id %}") Rejected
+                      - else
+                        %a(href="{% url 'project' application.position.project.id %}") Unknown
+          - else
+            %p You haven't submitted any applications.
+      .col.offset-1
+        
+        / User Avatar
+        - if profile.avatar
+          %img.w-100(src="{{ profile.avatar.url }}" alt="{{ profile.name }}'s avatar")
+        - else
+          .g-img-placeholder.mb-5
+        
+        / Skills
+        %div.mt-5
+          %h5<
+            %small.text-muted Skills
+          - if profile.skills.all
+            %ul
+              - for skill in profile.skills.all
+                %li.mt-2= skill.name
+          -else
+            %p.mt-2 No skills currently listed.
+        
+        / User Projects
+        %div.mt-5
+          %h5<
+            - if profile.user == request.user
+              %small.text-muted My Projects
+            -else
+              %small.text-muted {{ profile.name }}'s Projects
+          - if profile.user.owned_projects
+            %ul
+              - for project in profile.user.owned_projects.all
+                %li.mt-2<
+                  %a(href="{% url 'project' project.id %}")= project.title
+          - else
+            %p.mt-2 You haven't started any projects.

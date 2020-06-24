@@ -1,0 +1,72 @@
+.alert {
+  margin-bottom: 0;
+}
+.aspect-ratio-box {
+  height: 0;
+  overflow: hidden;
+  padding-top: 100%;
+  background: black;
+  position: relative
+}
+.aspect-ratio-box-inside {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.g-img-placeholder {
+  width: 100%;
+  padding-top: 100%;
+  background-color: lightgray;
+  box-sizing: content-box;
+  position: relative;
+}
+.g-img-container {
+  width: 100%;
+  position: relative;
+}
+.g-img {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.g-img-edit-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  /*transform: translate(-50%, 50%);*/
+}
+.g-img-upload-btn {
+  position: absolute;
+  top: 1rem;
+  right: 50%;
+  transform: translate(50%, 0);
+}
+.g-img-delete-btn {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+}
+.g-pointer {
+  cursor: pointer;
+}
+
+.g-img-btn input[type="file"] {
+  opacity: 0;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  cursor: pointer;
+}
+.btn.focus, .btn:focus {
+  box-shadow: none;
+}
+#markdown-preview {
+  overflow-y: auto;
+}

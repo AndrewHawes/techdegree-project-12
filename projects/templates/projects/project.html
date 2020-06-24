@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+  Project
+
+{% endblock %}
+{% block content %}
+<!-- Header Buttons -->
+  {% if project.owner == request.user %}
+    <div class="container-fluid px-0 py-4 bg-light">
+      <div class="container">
+        <a href="{% url 'project_edit' project.id %}" role="button" class="btn btn-lg btn-outline-primary font-weight-bold">Edit Project</a>
+        <a href="{% url 'project_delete' project.id %}" role="button" class="btn btn-lg btn-link text-decoration-none ml-2 font-weight-bold">Delete Project</a>
+
+      </div>
+    </div>
+  {% endif %}
+  <main class="container px-0 mt-5">
+    <div class="row">
+      <div class="col-8">
+
+<!-- Project Details -->
+        <section>
+          <h1>{{ project.title }}</h1>
+          <p>Project Owner:
+            <a href="{% url 'profile' project.owner.id %}">{{ project.owner }}</a></p>
+          <div>
+            {{ project.get_description|safe }}
+
+          </div>
+        </section>
+<!-- Position Details -->
+        <section>
+          <h2 class="mt-5">Positions</h2>
+          <hr>
+          {% if project.positions.all %}
+            {% for position in project.positions.all %}
+              <div class="card my-3" id="id_position_{{position.id}}">
+                <h4 class="card-header">{{ position.title }}</h4>
+                <div class="card-body">
+                  <h6 class="mb-2">Description</h6>
+                  <p class="card-text">
+                    {{ position.get_description|safe }}
+                  </p>
+                  {% if position.time_commitment %}
+                    <h6 class="mb-2 mt-4">Time Commitment</h6>
+                    <p class="card-text">
+                      {{ position.time_commitment }}
+                    </p>
+                  {% endif %}
+<!-- Skills -->
+                  <h6 class="mb-2 mt-4">Relevant Skills</h6>
+                  <ul class="mb-4">
+                    {% for skill in position.skills.all %}
+                      <li>{{ skill.name }}</li>
+                    {% endfor %}
+                  </ul>
+                  {% if not position.filled %}
+                    {% if user.is_authenticated %}
+                      {% if user not in position.applicants.all %}
+                        <a data-id="{{ position.id }}" class="btn btn-primary js-btn-apply">Apply</a>
+                      {% else %}
+                        <a class="btn btn-primary disabled">Applied</a>
+                      {% endif %}
+                    {% else %}
+                      <a href="{% url 'signin' %}" class="btn btn-primary">Sign In to Apply</a>
+                    {% endif %}
+                  {% else %}
+                    <a class="btn btn-dark disabled">Position Filled</a>
+                  {% endif %}
+                </div>
+              </div>
+            {% endfor %}
+            {% else %}
+              <p>There are currently no positions listed for this project.</p>
+
+          {% endif %}
+        </section>
+      </div>
+<!-- Open Positions -->
+      <div class="col offset-1">
+        <h5><small class="text-muted">Open Positions</small></h5>
+        {% for position in project.positions.all %}
+          {% if forloop.first %}
+            <ul></ul>
+          {% endif %}
+          {% if not position.filled %}
+            <li><a href="#id_position_{{ position.id }}">{{ position.title }}</a></li>
+          {% endif %}
+        {% empty %}
+          <p>This project currently has no open positions.</p>
+
+        {% endfor %}
+<!-- Timeline -->
+        <h5 class="mt-5"><small class="text-muted">Project Timeline</small></h5>
+        <div class="mt-3">
+          {{ project.timeline }}
+
+        </div>
+<!-- Applicant Requirements -->
+        <h5 class="mt-5"><small class="text-muted">Applicant Requirements</small></h5>
+        <div class="mt-3">
+          {{ project.applicant_requirements }}
+        </div>
+      </div>
+    </div>
+  </main>
+{% endblock %}
+{% block javascript %}
+  <script src="{% static 'js/app/project.js' %}"></script>
+{% endblock %}

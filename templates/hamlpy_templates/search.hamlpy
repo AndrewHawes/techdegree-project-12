@@ -1,0 +1,20 @@
+- extends 'base.html'
+- load static
+- block title
+  Search Results
+- block content
+  
+  %main.container.mt-4
+    .row
+      .col-6
+        %h3 Search
+        %p<
+          Search results for:
+          = query
+      .col-6
+        %a(class='btn btn-primary btn-lg float-right' href="{% url 'project_new' %}") New Project
+
+    - include 'partials/main.html'
+
+- block javascript
+  %script(src="{% static 'js/app/position-filters.js' %}")

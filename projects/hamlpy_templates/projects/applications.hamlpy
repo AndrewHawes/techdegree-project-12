@@ -1,0 +1,82 @@
+- extends 'base.html'
+- load static
+- block title
+  Applications
+-block content
+  
+  / Actions Bar
+  .container-fluid.mx-0.py-4.bg-light
+    .container
+      %nav.nav.nav-pills
+        %a.nav-item.nav-link.bg-dark.font-weight-bold.rounded-pill.active(
+          href="{% url 'applications' %}") Applications
+        %a.nav-item.nav-link.text-dark.font-weight-bold(
+          href="{% url 'profile' %}") Profile
+  
+  %main.container.mt-4
+    .row
+      %h3 Projects
+    .row
+      .col-3
+        
+        / Status
+        %h5<
+          %small.text-muted Status
+        %ul.nav.flex-column.nav-pills.js-filter
+          %li.nav-item
+            %a.nav-link.font-weight-bold.active(href='' data-toggle='pill' data-status='all' data-filter='status')
+              All Applications
+          %li.nav-item
+            %a.nav-link(href='' data-toggle='pill' data-status='None' data-filter='status') New Applications
+          %li.nav-item
+            %a.nav-link(href='' data-toggle='pill' data-status='True' data-filter='status') Accepted
+          %li.nav-item
+            %a.nav-link(href='' data-toggle='pill' data-status='False' data-filter='status') Rejected
+        
+        / My Projects
+        %h5.mt-5<
+          %small.text-muted My Projects
+        %ul.nav.flex-column.nav-pills.js-filter
+          %li.nav-item
+            %a.nav-link.font-weight-bold.active(href='' data-toggle='pill'
+            data-project='all'
+            data-filter='project') All Projects
+          - for project in user.owned_projects.all
+            %li.nav-item
+              %a.nav-link(href="{% url 'project' project.id %}" data-toggle='pill'
+              data-project="{{ project.id }}"
+              data-filter='project')= project.title
+        
+        / Project Needs
+        %h5.mt-5<
+          %small.text-muted Project Needs
+        %ul.nav.flex-column.nav-pills.js-filter
+          %li.nav-item
+            %a.nav-link.font-weight-bold.active(
+            href='' data-toggle='pill' data-position='all' data-filter='position') All Needs
+          
+          - for position_title in position_titles
+            %li.nav-item
+              %a.nav-link(href='' data-toggle='pill'
+              data-position="{{ position_title }}"
+              data-filter='position')= position_title
+      
+      .col-8.offset-1
+        
+        / Open Applications
+        %table.table
+          %thead
+            %tr
+              %th.border-top-0(scope='col') Applicant
+              %th.border-top-0(scope='col') Position
+              %th.border-top-0(scope='col')
+          %tbody
+            - for application in applications
+              %tr.js-application-row(
+              data-id="{{ application.id }}"
+              data-status="{{ application.accepted }}"
+              data-project="{{ application.position.project.id }}"
+              data-position="{{ application.position.title }}")
+                - include 'projects/partials/application_row.html'
+- block javascript
+  %script(src="{% static 'js/app/applications.js' %}")

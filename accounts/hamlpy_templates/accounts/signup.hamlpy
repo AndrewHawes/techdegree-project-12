@@ -1,0 +1,17 @@
+- extends 'base.html'
+- load crispy_forms_tags
+
+- block content
+  .container-fluid.px-0.py-4
+    .row
+      .col-2.offset-5
+        %h3.mb-4 Sign Up
+        %form(method='post')
+          - csrf_token
+          = form.full_name|as_crispy_field
+          = form.email|as_crispy_field
+          = form.password1|as_crispy_field
+          = form.password2|as_crispy_field
+          %button.btn.btn-lg.btn-primary.mr-3(type='submit') Sign Up
+          %a.btn.btn-lg.btn-outline-primary.text-decoration-none(
+            href="{% url 'signin' %}") Sign In

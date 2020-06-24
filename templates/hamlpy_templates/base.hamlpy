@@ -1,0 +1,58 @@
+- load static
+!!! 5
+%html(lang='en')
+  %head
+    %meta(charset='utf-8')
+    %meta(name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no')
+    
+    %title<
+      - block title
+        Team Builder
+    
+    / Bootstrap CSS
+    %link(rel='stylesheet' href="{% static 'css/bootstrap/bootstrap.min.css' %}")
+    
+    / Font Awesome
+    %link(rel='stylesheet' href="{% static 'css/all.min.css' %}")
+    
+    / jQuery Editable Select
+    %link(rel="stylesheet" href="{% static 'css/jquery-editable-select.min.css' %}")
+    
+    / Cropper
+    %link(href="{% static 'imageutils/css/cropper.min.css' %}" rel="stylesheet")
+    
+    - block css
+    
+    / Global CSS
+    %link(rel='stylesheet' href="{% static 'css/global.css' %}")
+  
+  %body.mb-5
+    / NavBar
+    %nav.navbar.navbar-expand.navbar-dark.bg-primary.px-0.py-4
+      .container.navbar-nav
+        %a.nav-link(href="{% url 'index' %}")
+          %i.fas.fa-home.fa-lg
+        %form.my-auto.mx-4.d-inline.w-100(method='get' action="{% url 'search' %}")
+          .input-group.input-group-lg
+            %input.form-control.border.border-right-0(type='search' name='q' placeholder='Search projects...')
+            %span.input-group-append
+              %button.btn.btn-outline-secondary.border.border-left-0
+                %i.fas.fa-search
+        
+        - if user.is_authenticated
+          %a.nav-link.text-nowrap(href="{% url 'profile' %}") Profile
+          %a.nav-link.text-nowrap.ml-2(href="{% url 'signout' %}") Sign Out
+        - else
+          %a.nav-link.text-nowrap(href="{% url 'signin' %}") Sign In
+          %a.nav-link.text-nowrap.ml-2(href="{% url 'signup' %}") Register
+    - include 'partials/messages.html'
+    - block content
+    / jQuery 3.4.1
+    %script(src="{% static 'js/jquery-3.4.1.min.js' %}")
+    %script(src="{% static 'js/bootstrap/bootstrap.bundle.min.js' %}")
+    %script(src="{% static 'js/jquery-editable-select.min.js' %}")
+    %script(src="{% static 'js/showdown.min.js' %}")
+    %script(src="{% static 'js/autogrow.js' %}")
+    %script(src="{% static 'js/app/ajax-csrf-setup.js' %}")
+    
+    - block javascript

@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load project_extras %}
+{% load formset_tags %}
+
+{% block title %}
+  Edit Profile
+
+{% endblock %}
+{% block content %}
+  {% include 'imageutils/modals/modal_image_editor.html' %}
+
+<!-- Top Navigation Buttons -->
+  <div class="container-fluid px-0 py-4 bg-light">
+    <div class="container">
+      <nav class="nav nav-pills">
+        <a href="{% url 'applications' %}" class="nav-item nav-link text-dark font-weight-bold">Applications</a>
+        <a href="{% url 'profile' %}" class="nav-item nav-link bg-dark font-weight-bold rounded-pill active">Profile</a>
+
+      </nav>
+    </div>
+  </div>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="container mt-4">
+
+<!-- Heading and Submit button -->
+      <div class="row">
+        <div class="col">
+          <h2 class="mb-5">Profile</h2>
+        </div>
+        <div class="col">
+          <button type="submit" class="btn btn-primary btn-lg float-right font-weight-bold">Save Changes</button>
+        </div>
+      </div>
+<!-- Profile Details -->
+      <div class="row">
+        <div class="col-8">
+          {% field form.display_name %}
+          <div class="card">
+            <div class="card-body">
+              <div class="custom-control custom-switch mb-3">
+                {% if user.profile.using_markdown %}
+                  <input type="checkbox" checked class="custom-control-input" id="js-toggle-markdown">
+                  <label for="js-toggle-markdown" class="custom-control-label text-info">Markdown enabled</label>
+                {% else %}
+                  <input type="checkbox" class="custom-control-input" id="js-toggle-markdown">
+                  <label for="js-toggle-markdown" class="custom-control-label text-muted">Markdown disabled</label>
+                {% endif %}
+              </div>
+              {% field form.about %}
+              {% if user.profile.using_markdown %}
+                <div class="border rounded" id="markdown-preview">
+                  <div class="px-2 py-1" id="markdown-output"></div>
+                </div>
+              {% else %}
+                <div style="display: none;" class="border rounded" id="markdown-preview">
+                  <div class="px-2 py-1" id="markdown-output"></div>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        <div class="col-3 offset-1">
+<!-- Upload Avatar -->
+          {% if user.profile.avatar %}
+            <div class="g-img-container mb-2">
+              <img src="{{ user.profile.avatar.url }}" alt="{{ user.profile.display_name }}'s avatar" data-preview-for="id_avatar" data-url="{% url 'imageutils:save_image' %}" class="w-100 js-img-edit" id="user-avatar">
+              <button data-editor-for="user-avatar" class="btn btn-primary btn-sm g-img-edit-btn js-img-edit" id="open-editor-btn"><i class="fas fa-edit"></i></button>
+            </div>
+          {% else %}
+            <div class="g-img-placeholder mb-2">
+              <div class="g-img"></div>
+            </div>
+          {% endif %}
+          <div class="custom-file mb-5">
+            <input type="file" name="avatar" accept="image/*" data-url="{% url 'imageutils:upload_avatar' %}" class="custom-file-input" id="id_avatar">
+            {% if user.profile.avatar %}
+              <label for="id_avatar" class="custom-file-label">Change Image</label>
+            {% else %}
+              <label for="id_avatar" class="custom-file-label">Upload Image</label>
+
+            {% endif %}
+          </div>
+<!-- Skills -->
+          <h5><small class="text-muted">My Skills</small></h5>
+          <div data-formset-prefix="{{ formset.prefix }}" id="formset">
+            {{ formset.management_form }}
+            {{ formset.media }}
+            {% if formset.non_form_errors %}
+              <div class="invalid-feedback d-block">
+                {{ formset.non_form_errors }}
+
+              </div>
+            {% endif %}
+<!-- Skill Formset Body -->
+            <div data-formset-body>
+              {% for form in formset %}
+                <div data-formset-form class="mb-3">
+                  <div class="input-group input-group-sm">
+                    {{ form.name }}
+                    {% for hidden in form.hidden_fields %}
+                      {{ hidden }}
+                    {% endfor %}
+                    <div class="input-group-append">
+                      <div hidden>{{ form.DELETE }}</div>
+                      <button type="button" tabindex="-1" data-formset-delete-button class="btn btn-danger btn rounded-right"><i class="fas fa-times"></i></button>
+                    </div>
+                  </div>
+                  {% if form.errors %}
+                    <div class="invalid-feedback d-block mb-3">
+                      {% for error in form.name.errors %}
+                        {{ error|escape }}
+
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+                </div>
+              {% endfor %}
+            </div>
+            <script type="form-template" data-formset-empty-form>
+              {% escapescript %}
+                <div data-formset-form class="mb-3">
+                  <div class="input-group input-group-sm">
+                    {{ formset.empty_form.name }}
+                    {% for hidden in formset.empty_form.hidden_fields %}
+                      {{ hidden }}
+                    {% endfor %}
+                    <div class="input-group-append">
+                      <div hidden>{{ formset.empty_form.DELETE }}</div>
+                      <button type="button" tabindex="-1" data-formset-delete-button class="btn btn-danger rounded-right"><i class="fas fa-times"></i></button>
+                    </div>
+                  </div>
+                  {% if formset.empty_form.errors %}
+                    <div class="invalid-feedback d-block mb-3">
+                      {% for error in formset.empty_form.name.errors %}
+                        {{ error|escape }}
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+                  <script>$(".js-select").editableSelect();</script>
+                </div>
+              {% endescapescript %}
+            </script>
+<!-- This button will add a new form when clicked -->
+            <div class="text-center">
+              <button type="button" data-formset-add class="btn btn-outline-primary btn-sm mt-3">Add Another Skill</button>
+
+            </div>
+            <script>
+              jQuery(function($) {
+                $("#formset").formset({
+                  animateForms: true,
+                  reorderMode: "dom",
+                });
+              });
+            </script>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+{% endblock %}
+{% block javascript %}
+  <script src="{% static 'imageutils/js/cropper.min.js' %}"></script>
+  <script src="{% static 'imageutils/js/jquery-cropper.min.js' %}"></script>
+  <script src="{% static 'imageutils/js/imageutils.js' %}"></script>
+  <script src="{% static 'js/jquery-editable-select.min.js' %}"></script>
+  <script src="{% static 'js/showdown.min.js' %}"></script>
+  <script src="{% static 'js/app/profile-edit-markdown.js' %}"></script>
+{% endblock %}

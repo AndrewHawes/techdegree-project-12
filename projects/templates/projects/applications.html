@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+  Applications
+{% endblock %}
+{% block content %}
+
+<!-- Actions Bar -->
+  <div class="container-fluid mx-0 py-4 bg-light">
+    <div class="container">
+      <nav class="nav nav-pills">
+        <a href="{% url 'applications' %}" class="nav-item nav-link bg-dark font-weight-bold rounded-pill active">Applications</a>
+        <a href="{% url 'profile' %}" class="nav-item nav-link text-dark font-weight-bold">Profile</a>
+
+      </nav>
+    </div>
+  </div>
+  <main class="container mt-4">
+    <div class="row">
+      <h3>Projects</h3>
+    </div>
+    <div class="row">
+      <div class="col-3">
+
+<!-- Status -->
+        <h5><small class="text-muted">Status</small></h5>
+        <ul class="nav flex-column nav-pills js-filter">
+          <li class="nav-item">
+            <a href="" data-toggle="pill" data-status="all" data-filter="status" class="nav-link font-weight-bold active">
+              All Applications
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="" data-toggle="pill" data-status="None" data-filter="status" class="nav-link">New Applications</a>
+          </li>
+          <li class="nav-item">
+            <a href="" data-toggle="pill" data-status="True" data-filter="status" class="nav-link">Accepted</a>
+          </li>
+          <li class="nav-item">
+            <a href="" data-toggle="pill" data-status="False" data-filter="status" class="nav-link">Rejected</a>
+
+          </li>
+        </ul>
+<!-- My Projects -->
+        <h5 class="mt-5"><small class="text-muted">My Projects</small></h5>
+        <ul class="nav flex-column nav-pills js-filter">
+          <li class="nav-item">
+            <a href="" data-toggle="pill" data-project="all" data-filter="project" class="nav-link font-weight-bold active">All Projects</a>
+          </li>
+          {% for project in user.owned_projects.all %}
+            <li class="nav-item">
+              <a href="{% url 'project' project.id %}" data-toggle="pill" data-project="{{ project.id }}" data-filter="project" class="nav-link">{{ project.title }}</a>
+
+            </li>
+          {% endfor %}
+        </ul>
+<!-- Project Needs -->
+        <h5 class="mt-5"><small class="text-muted">Project Needs</small></h5>
+        <ul class="nav flex-column nav-pills js-filter">
+          <li class="nav-item">
+            <a href="" data-toggle="pill" data-position="all" data-filter="position" class="nav-link font-weight-bold active">All Needs</a>
+
+          </li>
+          {% for position_title in position_titles %}
+            <li class="nav-item">
+              <a href="" data-toggle="pill" data-position="{{ position_title }}" data-filter="position" class="nav-link">{{ position_title }}</a>
+
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="col-8 offset-1">
+
+<!-- Open Applications -->
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col" class="border-top-0">Applicant</th>
+              <th scope="col" class="border-top-0">Position</th>
+              <th scope="col" class="border-top-0"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for application in applications %}
+              <tr data-id="{{ application.id }}" data-status="{{ application.accepted }}" data-project="{{ application.position.project.id }}" data-position="{{ application.position.title }}" class="js-application-row">
+                {% include 'projects/partials/application_row.html' %}
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+{% endblock %}
+
+{% block javascript %}
+  <script src="{% static 'js/app/applications.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,17 @@
+- extends 'base.html'
+- load static
+- block title
+  Projects
+- block content
+
+  .container.mt-4
+    .row
+      .col-6
+        %h3 Projects
+      .col-6
+        %a(class='btn btn-primary btn-lg float-right' href="{% url 'project_new' %}") New Project
+    
+    - include 'partials/main.html'
+
+- block javascript
+  %script(src="{% static 'js/app/position-filters.js' %}")

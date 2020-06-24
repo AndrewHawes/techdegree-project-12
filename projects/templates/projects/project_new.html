@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% load project_extras %}
+{% load formset_tags %}
+{% block title %}
+  New Project
+
+{% endblock %}
+{% block content %}
+  {{ block.super }}
+  <form method="post">
+    {% csrf_token %}
+    {{ formset.management_form }}
+    <div class="container-fluid px-0 py-4 bg-light">
+      <div class="container">
+        <button type="submit" class="btn btn-lg btn-outline-primary font-weight-bold">Save Project</button>
+        <a href="{% url 'index' %}" class="btn btn-lg btn-link text-decoration-none ml-2 font-weight bold">Discard</a>
+
+      </div>
+    </div>
+    <main class="container px-0 mt-5">
+      <div class="row">
+<!-- Project Details -->
+        <div class="col-8">
+          {% field form.title %}
+          {% field form.description %}
+
+<!-- Position Details -->
+          <h2 class="mt-5">Positions</h2>
+          <div data-formset-prefix="{{ formset.prefix }}" id="formset">
+            {{ formset.management_form }}
+            {{ formset.media }}
+            {% if formset.non_form_errors %}
+              <div class="invalid-feedback d-block">
+                {{ formset.non_form_errors }}
+
+              </div>
+            {% endif %}
+<!-- Position Formset Body -->
+            <div data-formset-body>
+              {% if user.profile.using_markdown %}
+                <p class="text-info mb-3">Markdown syntax is allowed in position descriptions.</p>
+              {% else %}
+                <p class="text-muted mb-3">Markdown is currently disabled. You can enable it on your<a href="{% url 'profile_edit' %}">
+                    edit profile
+                  </a>page.</p>
+              {% endif %}
+              {% for form in formset %}
+                <div data-formset-form class="card my-3">
+                  <div class="card-body">
+                    {% field form.title %}
+                    {% field form.description %}
+                    {% field form.skills show_label=True %}
+                    {% field form.time_commitment %}
+                    {% for hidden in form.hidden_fields %}
+                      {{ hidden }}
+                    {% endfor %}
+                    <div class="text-right">
+                      <div hidden>{{ form.DELETE }}</div>
+                      <input type="button" value="Remove" data-formset-delete-button class="btn btn-sm btn-danger">
+
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+            <script type="form-template" data-formset-empty-form>
+              {% escapescript %}
+                <div data-formset-form class="card my-3">
+                  <div class="card-body">
+                    {% field formset.empty_form.title %}
+                    {% field formset.empty_form.description %}
+                    {% field formset.empty_form.skills show_label=True %}
+                    {% field formset.empty_form.time_commitment %}
+                    {% for hidden in formset.empty_form.hidden_fields %}
+                      {{ hidden }}
+                    {% endfor %}
+                    <div class="text-right">
+                      <div hidden>{{ formset.empty_form.DELETE }}</div>
+                      <button type="button" data-formset-delete-button class="btn btn-sm btn-danger">Remove</button>
+                    </div>
+                  </div>
+                </div>
+              {% endescapescript %}
+            </script>
+            <div class="text-center">
+              <button type="button" data-formset-add class="btn btn-outline-primary mt-3">Add Another Position</button>
+
+            </div>
+            <script>
+              jQuery(function($) {
+                $("#formset").formset({
+                  animateForms: true,
+                  reorderMode: "dom",
+                });
+              });
+              
+            </script>
+          </div>
+        </div>
+<!-- Timeline -->
+        <div class="col offset-1">
+          <h5 class="mb-3"><small class="text-muted">Project Timeline</small></h5>
+          {% field form.timeline %}
+
+<!-- Applicant Requirements -->
+          <h5 class="mb-3"><small class="text-muted">Applicant Requirements</small></h5>
+          {% field form.applicant_requirements %}
+        </div>
+      </div>
+    </main>
+  </form>
+{% endblock %}

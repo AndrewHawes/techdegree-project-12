@@ -1,0 +1,89 @@
+- extends 'base.html'
+- load static
+- block title
+  Project
+
+- block content
+  / Header Buttons
+  - if project.owner == request.user
+    .container-fluid.px-0.py-4.bg-light
+      .container
+        %a.btn.btn-lg.btn-outline-primary.font-weight-bold(href="{% url 'project_edit' project.id %}" role='button')<
+          Edit Project
+        %a.btn.btn-lg.btn-link.text-decoration-none.ml-2.font-weight-bold(
+          href="{% url 'project_delete' project.id %}" role='button') Delete Project
+
+  %main.container.px-0.mt-5
+    .row
+      .col-8
+        
+        / Project Details
+        %section
+          %h1= project.title
+          %p<
+            Project Owner:
+            %a(href="{% url 'profile' project.owner.id %}")<
+              = project.owner
+          %div
+            = project.get_description|safe
+        
+        / Position Details
+        %section
+          %h2.mt-5 Positions
+          %hr
+          - if project.positions.all
+            - for position in project.positions.all
+              .card.my-3(id='id_position_{{position.id}}')
+                %h4.card-header= position.title
+                .card-body
+                  %h6.mb-2 Description
+                  %p.card-text
+                    = position.get_description|safe
+                  - if position.time_commitment
+                    %h6.mb-2.mt-4 Time Commitment
+                    %p.card-text
+                      = position.time_commitment
+                  / Skills
+                  %h6.mb-2.mt-4 Relevant Skills
+                  %ul.mb-4
+                    - for skill in position.skills.all
+                      %li= skill.name
+                  - if not position.filled
+                    - if user.is_authenticated
+                      - if user not in position.applicants.all
+                        %a.btn.btn-primary.js-btn-apply(data-id="{{ position.id }}") Apply
+                      - else
+                        %a.btn.btn-primary.disabled Applied
+                    - else
+                      %a.btn.btn-primary(href="{% url 'signin' %}") Sign In to Apply
+                  - else
+                    %a.btn.btn-dark.disabled() Position Filled
+            - else
+              %p There are currently no positions listed for this project.
+      
+      / Open Positions
+      .col.offset-1
+        %h5<
+          %small.text-muted Open Positions
+        - for position in project.positions.all
+          - if forloop.first
+            %ul
+          - if not position.filled
+            %li<
+              %a(href="#id_position_{{ position.id }}")= position.title
+        - empty
+          %p This project currently has no open positions.
+        
+        / Timeline
+        %h5.mt-5<
+          %small.text-muted Project Timeline
+        .mt-3
+          = project.timeline
+        
+        / Applicant Requirements
+        %h5.mt-5<
+          %small.text-muted Applicant Requirements
+        .mt-3
+          = project.applicant_requirements
+- block javascript
+  %script(src="{% static 'js/app/project.js' %}")

@@ -1,0 +1,78 @@
+.row.mt-4
+  .col-3
+    
+    / Position Filters
+    %h5<
+      %small.text-muted Positions Needed
+    %ul.nav.flex-column.nav-pills.js-position-filter
+      %li.nav-item
+        %a.nav-link.active.font-weight-bold(
+        href='#'
+        data-toggle='pill'
+        data-position='all'
+        data-filter='position') All Positions
+      - for position in position_names
+        %li.nav-item
+          %a.nav-link(
+          href=""
+          data-toggle='pill'
+          data-position="{{ position }}"
+          data-filter='position')= position
+    
+    / Skill Filters
+    %h5.mt-5<
+      %small.text-muted Skills Needed
+    %ul.nav.flex-column.nav-pills.js-skill-filter
+      %li.nav-item
+        %a.nav-link.active.font-weight-bold(
+        href='#'
+        data-toggle='pill'
+        data-skills='all'
+        data-filter='skills') All Skills
+      - for skill in skills
+        %li.nav-item
+          %a.nav-link(
+          href=""
+          data-toggle='pill'
+          data-skills="{{ skill.id }}"
+          data-filter='skills')= skill.name
+  
+  .col-8.offset-1
+    - if user.is_authenticated
+      .custom-control.custom-switch
+        %input.custom-control-input#js-toggle-my-projects(type='checkbox')
+        %label.custom-control-label(for='js-toggle-my-projects') Show only projects that need my skills
+        
+    / All Projects
+    %table.table#all-projects
+      %thead
+        %tr
+          %th.border-top-0(scope='col') Project
+          %th.border-top-0(scope='col') Position Needed
+      %tbody
+        - for position in positions
+          %tr.js-position-row(
+          data-id="{{ position.id }}"
+          data-position="{{ position.title }}"
+          data-skills="{{ position.skills }}")
+            %td
+              %a(href="{% url 'project' position.project.id %}")= position.project.title
+            %td
+              %a(href="{% url 'project' position.project.id %}")= position.title
+    
+    / My Projects
+    %table.table#my-projects(style="display: none;")
+      %thead
+        %tr
+          %th.border-top-0(scope='col') Project
+          %th.border-top-0(scope='col') Position Needed
+      %tbody
+        - for position in my_positions
+          %tr.js-position-row(
+          data-id="{{ position.id }}"
+          data-position="{{ position.title }}"
+          data-skills="{{ position.skills }}")
+            %td
+              %a(href="{% url 'project' position.project.id %}")= position.project.title
+            %td
+              %a(href="{% url 'project' position.project.id %}")= position.title

@@ -1,0 +1,83 @@
+<div class="row mt-4">
+  <div class="col-3">
+
+<!-- Position Filters -->
+    <h5><small class="text-muted">Positions Needed</small></h5>
+    <ul class="nav flex-column nav-pills js-position-filter">
+      <li class="nav-item">
+        <a href="#" data-toggle="pill" data-position="all" data-filter="position" class="nav-link active font-weight-bold">All Positions</a>
+      </li>
+      {% for position in position_names %}
+        <li class="nav-item">
+          <a href="" data-toggle="pill" data-position="{{ position }}" data-filter="position" class="nav-link">{{ position }}</a>
+
+        </li>
+      {% endfor %}
+    </ul>
+<!-- Skill Filters -->
+    <h5 class="mt-5"><small class="text-muted">Skills Needed</small></h5>
+    <ul class="nav flex-column nav-pills js-skill-filter">
+      <li class="nav-item">
+        <a href="#" data-toggle="pill" data-skills="all" data-filter="skills" class="nav-link active font-weight-bold">All Skills</a>
+      </li>
+      {% for skill in skills %}
+        <li class="nav-item">
+          <a href="" data-toggle="pill" data-skills="{{ skill.id }}" data-filter="skills" class="nav-link">{{ skill.name }}</a>
+
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+  <div class="col-8 offset-1">
+    {% if user.is_authenticated %}
+      <div class="custom-control custom-switch">
+        <input type="checkbox" class="custom-control-input" id="js-toggle-my-projects">
+        <label for="js-toggle-my-projects" class="custom-control-label">Show only projects that need my skills</label>
+
+      </div>
+    {% endif %}
+<!-- All Projects -->
+    <table class="table" id="all-projects">
+      <thead>
+        <tr>
+          <th scope="col" class="border-top-0">Project</th>
+          <th scope="col" class="border-top-0">Position Needed</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for position in positions %}
+          <tr data-id="{{ position.id }}" data-position="{{ position.title }}" data-skills="{{ position.skills }}" class="js-position-row">
+            <td>
+              <a href="{% url 'project' position.project.id %}">{{ position.project.title }}</a>
+            </td>
+            <td>
+              <a href="{% url 'project' position.project.id %}">{{ position.title }}</a>
+
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+<!-- My Projects -->
+    <table style="display: none;" class="table" id="my-projects">
+      <thead>
+        <tr>
+          <th scope="col" class="border-top-0">Project</th>
+          <th scope="col" class="border-top-0">Position Needed</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for position in my_positions %}
+          <tr data-id="{{ position.id }}" data-position="{{ position.title }}" data-skills="{{ position.skills }}" class="js-position-row">
+            <td>
+              <a href="{% url 'project' position.project.id %}">{{ position.project.title }}</a>
+            </td>
+            <td>
+              <a href="{% url 'project' position.project.id %}">{{ position.title }}</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>

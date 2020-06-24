@@ -1,0 +1,8 @@
+- extends 'base.html'
+- block content
+  %div.container.text-center.mt-5
+    %form(method="post")
+      - csrf_token
+      %h4 Are you sure you want to delete "{{ object }}"?
+      %a.btn.btn-secondary(href="{% url 'project' project.id %}") Cancel
+      %button.btn.btn-primary(type="submit") Confirm

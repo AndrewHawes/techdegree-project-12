@@ -1,0 +1,143 @@
+- extends 'base.html'
+- load static
+- load project_extras
+- load formset_tags
+
+- block title
+  Edit Profile
+
+- block content
+  - include 'imageutils/modals/modal_image_editor.html'
+  
+  / Top Navigation Buttons
+  .container-fluid.px-0.py-4.bg-light
+    .container
+      %nav.nav.nav-pills
+        %a.nav-item.nav-link.text-dark.font-weight-bold(href="{% url 'applications' %}")<
+          Applications
+        %a.nav-item.nav-link.bg-dark.font-weight-bold.rounded-pill.active(
+          href="{% url 'profile' %}") Profile
+  
+  %form(method='post' enctype='multipart/form-data')
+    - csrf_token
+    .container.mt-4
+      
+      / Heading and Submit button
+      .row
+        .col
+          %h2.mb-5 Profile
+        .col
+          %button.btn.btn-primary.btn-lg.float-right.font-weight-bold(type='submit')<
+            Save Changes
+      
+      / Profile Details
+      .row
+        .col-8
+          - field form.display_name
+          .card
+            .card-body
+              .custom-control.custom-switch.mb-3
+                - if user.profile.using_markdown
+                  %input.custom-control-input#js-toggle-markdown(type='checkbox' checked)
+                  %label.custom-control-label.text-info(for='js-toggle-markdown') Markdown enabled
+                - else
+                  %input.custom-control-input#js-toggle-markdown(type='checkbox')
+                  %label.custom-control-label.text-muted(for='js-toggle-markdown') Markdown disabled
+              - field form.about
+              - if user.profile.using_markdown
+                #markdown-preview.border.rounded
+                  #markdown-output.px-2.py-1
+              - else
+                #markdown-preview.border.rounded(style="display: none;")
+                  #markdown-output.px-2.py-1
+        
+        .col-3.offset-1
+          / Upload Avatar
+          - if user.profile.avatar
+            .g-img-container.mb-2
+              %img#user-avatar.w-100.js-img-edit(src="{{ user.profile.avatar.url }}"
+                alt="{{ user.profile.display_name }}'s avatar" data-preview-for="id_avatar"
+                data-url="{% url 'imageutils:save_image' %}")
+              %button#open-editor-btn.btn.btn-primary.btn-sm.g-img-edit-btn.js-img-edit(
+              data-editor-for="user-avatar")<
+                %i.fas.fa-edit
+          - else
+            .g-img-placeholder.mb-2
+              .g-img
+
+          .custom-file.mb-5
+            %input#id_avatar.custom-file-input(type="file" name="avatar" accept="image/*"
+              data-url="{% url 'imageutils:upload_avatar' %}")
+            -if user.profile.avatar
+              %label.custom-file-label(for="id_avatar") Change Image
+            -else
+              %label.custom-file-label(for="id_avatar") Upload Image
+              
+          / Skills
+          %h5<
+            %small.text-muted My Skills
+          #formset(data-formset-prefix="{{ formset.prefix }}")
+            = formset.management_form
+            = formset.media
+            - if formset.non_form_errors
+              .invalid-feedback.d-block
+                = formset.non_form_errors
+            
+            / Skill Formset Body
+            %div(data-formset-body)
+              - for form in formset
+                %div.mb-3(data-formset-form)
+                  .input-group.input-group-sm
+                    = form.name
+                    - for hidden in form.hidden_fields
+                      = hidden
+                    .input-group-append
+                      %div(hidden)<
+                        = form.DELETE
+                      %button.btn.btn-danger.btn.rounded-right(type='button' tabindex='-1'
+                      data-formset-delete-button)<
+                        %i.fas.fa-times>
+                  - if form.errors
+                    .invalid-feedback.d-block.mb-3
+                      - for error in form.name.errors
+                        = error|escape
+            
+            %script(type='form-template' data-formset-empty-form)
+              - escapescript
+                %div.mb-3(data-formset-form)
+                  .input-group.input-group-sm
+                    = formset.empty_form.name
+                    - for hidden in formset.empty_form.hidden_fields
+                      = hidden
+                    .input-group-append
+                      %div(hidden)<
+                        = formset.empty_form.DELETE
+                      %button.btn.btn-danger.rounded-right(type='button' tabindex='-1'
+                      data-formset-delete-button)
+                        %i.fas.fa-times>
+                  - if formset.empty_form.errors
+                    .invalid-feedback.d-block.mb-3
+                      - for error in formset.empty_form.name.errors
+                        = error|escape
+                  %script $(".js-select").editableSelect();
+              - endescapescript
+            / This button will add a new form when clicked
+            .text-center
+              %button.btn.btn-outline-primary.btn-sm.mt-3(type='button' data-formset-add) Add Another Skill
+            
+            %script
+              :plain
+                jQuery(function($) {
+                  $("#formset").formset({
+                    animateForms: true,
+                    reorderMode: "dom",
+                  });
+                });
+- block javascript
+  %script(src="{% static 'imageutils/js/cropper.min.js' %}")
+  %script(src="{% static 'imageutils/js/jquery-cropper.min.js' %}")
+  %script(src="{% static 'imageutils/js/imageutils.js' %}")
+  
+  %script(src="{% static 'js/jquery-editable-select.min.js' %}")
+  %script(src="{% static 'js/showdown.min.js' %}")
+  %script(src="{% static 'js/app/profile-edit-markdown.js' %}")

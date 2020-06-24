@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+  Search Results
+{% endblock %}
+{% block content %}
+
+  <main class="container mt-4">
+    <div class="row">
+      <div class="col-6">
+        <h3>Search</h3>
+        <p>Search results for:
+          {{ query }}</p>
+      </div>
+      <div class="col-6">
+        <a href="{% url 'project_new' %}" class="btn btn-primary btn-lg float-right">New Project</a>
+
+      </div>
+    </div>
+    {% include 'partials/main.html' %}
+
+  </main>
+{% endblock %}
+
+{% block javascript %}
+  <script src="{% static 'js/app/position-filters.js' %}"></script>
+{% endblock %}
