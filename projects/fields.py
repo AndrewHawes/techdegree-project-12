@@ -19,8 +19,8 @@ class CustomModelChoiceIterator(ModelChoiceIterator):
 
 
 class CustomModelChoiceField(ModelChoiceField):
-    # Disabled lines are surrounded by triple quotes, as this modification
-    # may allow a bug to resurface.
+    # Disabled original lines are surrounded by triple quotes, as this
+    # modification may allow a bug to resurface.
 
     iterator = CustomModelChoiceIterator
     def __init__(self, queryset, *, empty_label="---------",
@@ -32,13 +32,19 @@ class CustomModelChoiceField(ModelChoiceField):
                          help_text=help_text, to_field_name=to_field_name,
                          limit_choices_to=limit_choices_to, **kwargs)
 
+    """
     def __deepcopy__(self, memo):
         result = super(ChoiceField, self).__deepcopy__(memo)
-        """
+
         # Need to force a new ModelChoiceIterator to be created, bug #11183
         if self.queryset is not None:
             result.queryset = self.queryset.all()
-        """
+        return result
+    """
+
+    def __deepcopy__(self, memo):
+        result = super(ChoiceField, self).__deepcopy__(memo)
+        assert(result.queryset is self.queryset)
         return result
 
 

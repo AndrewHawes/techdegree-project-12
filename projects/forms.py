@@ -4,6 +4,7 @@ from django.forms import inlineformset_factory
 from djangoformsetjs.utils import formset_media_js
 
 from accounts.models import Skill
+
 from .fields import CustomModelMultipleChoiceField
 from .models import Project, Position
 
@@ -27,11 +28,18 @@ class ProjectForm(forms.ModelForm):
 
 
 class PositionForm(forms.ModelForm):
+    # The built-in ModelMultipleChoiceField creates a new iterator and refreshes
+    # the queryset for each formset. This produces a large number of duplicate
+    # queries.
+    # I've left the original field commented out in case the __deepcopy__ bug
+    # becomes a problem with any future changes.
+
+    # skills = forms.ModelMultipleChoiceField(queryset=Skill.objects.all())
     skills = CustomModelMultipleChoiceField(queryset=Skill.objects.all())
+
     class Meta:
         model = Position
         fields = ['title', 'description', 'time_commitment', 'skills']
-        # widgets = {'skills': forms.SelectMultiple()}
 
     class Media:
         js = formset_media_js + ()
@@ -52,5 +60,5 @@ class PositionForm(forms.ModelForm):
         self.fields['description'].widget.attrs['rows'] = '5'
 
 
-PositionFormSet = inlineformset_factory(Project, Position, form=PositionForm, extra=1,
+PositionFormSet = inlineformset_factory(Project, Position, form=PositionForm, extra=0,
                                         can_delete=True)
