@@ -7,7 +7,7 @@ from django.forms.widgets import (
 from django.utils.translation import gettext_lazy as _
 
 
-class MyModelChoiceIterator(ModelChoiceIterator):
+class CustomModelChoiceIterator(ModelChoiceIterator):
 
     def __iter__(self):
         if self.field.empty_label is not None:
@@ -18,11 +18,11 @@ class MyModelChoiceIterator(ModelChoiceIterator):
             yield self.choice(obj)
 
 
-class MyModelChoiceField(ModelChoiceField):
+class CustomModelChoiceField(ModelChoiceField):
     # Disabled lines are surrounded by triple quotes, as this modification
     # may allow a bug to resurface.
 
-    iterator = ModelChoiceIterator
+    iterator = CustomModelChoiceIterator
     def __init__(self, queryset, *, empty_label="---------",
                  required=True, widget=None, label=None, initial=None,
                  help_text='', to_field_name=None, limit_choices_to=None,
@@ -42,7 +42,7 @@ class MyModelChoiceField(ModelChoiceField):
         return result
 
 
-class MyModelMultipleChoiceField(MyModelChoiceField):
+class CustomModelMultipleChoiceField(CustomModelChoiceField):
     """A MultipleChoiceField whose choices are a model QuerySet."""
     widget = SelectMultiple
     hidden_widget = MultipleHiddenInput

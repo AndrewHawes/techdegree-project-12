@@ -3,6 +3,8 @@ from django.forms import inlineformset_factory
 
 from djangoformsetjs.utils import formset_media_js
 
+from accounts.models import Skill
+from .fields import CustomModelMultipleChoiceField
 from .models import Project, Position
 
 
@@ -25,10 +27,11 @@ class ProjectForm(forms.ModelForm):
 
 
 class PositionForm(forms.ModelForm):
+    skills = CustomModelMultipleChoiceField(queryset=Skill.objects.all())
     class Meta:
         model = Position
         fields = ['title', 'description', 'time_commitment', 'skills']
-        widgets = {'skills': forms.SelectMultiple()}
+        # widgets = {'skills': forms.SelectMultiple()}
 
     class Media:
         js = formset_media_js + ()
