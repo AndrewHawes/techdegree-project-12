@@ -11,7 +11,6 @@ def index(request):
     skills = Skill.objects.order_by('name').distinct()
 
     my_positions = get_my_positions(request)
-    print(my_positions)
 
     context = {
         'positions': positions,
