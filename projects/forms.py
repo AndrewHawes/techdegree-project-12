@@ -30,9 +30,10 @@ class ProjectForm(forms.ModelForm):
 class PositionForm(forms.ModelForm):
     # The built-in ModelMultipleChoiceField creates a new iterator and refreshes
     # the queryset for each formset. This produces a large number of duplicate
-    # queries.
+    # queries and performance issues.
     # I've left the original field commented out in case the __deepcopy__ bug
-    # becomes a problem with any future changes.
+    # becomes a problem with any future changes, but it shouldn't affect
+    # anything here.
 
     # skills = forms.ModelMultipleChoiceField(queryset=Skill.objects.all())
     skills = CustomModelMultipleChoiceField(queryset=Skill.objects.all())
