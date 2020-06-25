@@ -11,7 +11,6 @@ from django.views.generic import CreateView, UpdateView, DeleteView
 
 from .forms import PositionFormSet, ProjectForm
 from .models import Application, Project, Position
-
 from .signals import application_status_changed
 
 
@@ -66,14 +65,11 @@ class UpdateProjectView(LoginRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
-        #
         qs = Position.objects.prefetch_related('skills')
-        #
+
         if self.request.POST:
-            # data['formset'] = PositionFormSet(self.request.POST, instance=self.object)
             data['formset'] = PositionFormSet(self.request.POST, instance=self.object, queryset=qs)
         else:
-            # data['formset'] = PositionFormSet(instance=self.object)
             data['formset'] = PositionFormSet(instance=self.object, queryset=qs)
         return data
 

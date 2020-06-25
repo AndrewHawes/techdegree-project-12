@@ -1,5 +1,5 @@
 from django.core.exceptions import ValidationError
-from django.forms.fields import ChoiceField, Field
+from django.forms.fields import ChoiceField
 from django.forms.models import ModelChoiceIterator, ModelChoiceField
 from django.forms.widgets import (
     MultipleHiddenInput, SelectMultiple,
@@ -23,6 +23,7 @@ class CustomModelChoiceField(ModelChoiceField):
     # modification may allow a bug to resurface.
 
     iterator = CustomModelChoiceIterator
+
     def __init__(self, queryset, *, empty_label="---------",
                  required=True, widget=None, label=None, initial=None,
                  help_text='', to_field_name=None, limit_choices_to=None,
@@ -44,7 +45,7 @@ class CustomModelChoiceField(ModelChoiceField):
 
     def __deepcopy__(self, memo):
         result = super(ChoiceField, self).__deepcopy__(memo)
-        assert(result.queryset is self.queryset)
+        assert (result.queryset is self.queryset)
         return result
 
 
