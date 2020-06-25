@@ -1,11 +1,10 @@
 from crispy_forms.helper import FormHelper
-
+from django import forms
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.forms import modelformset_factory, BaseModelFormSet
 from djangoformsetjs.utils import formset_media_js
 
-from django import forms
-from django.forms import modelformset_factory, BaseModelFormSet
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-
+from .fields import CustomModelChoiceField
 from .models import CustomUser, Profile, Skill
 
 
@@ -49,7 +48,7 @@ class ProfileEditForm(forms.ModelForm):
         self.fields['about'].widget.attrs['placeholder'] = 'Tell us about yourself...'
 
 
-class LazyModelChoiceField(forms.ModelChoiceField):
+class LazyModelChoiceField(CustomModelChoiceField):
     """Bypasses validation to allow custom input."""
     def clean(self, value):
         return value

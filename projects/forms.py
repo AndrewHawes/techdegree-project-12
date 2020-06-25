@@ -1,11 +1,9 @@
 from django import forms
 from django.forms import inlineformset_factory
-
 from djangoformsetjs.utils import formset_media_js
 
+from accounts.fields import CustomModelMultipleChoiceField
 from accounts.models import Skill
-
-from .fields import CustomModelMultipleChoiceField
 from .models import Project, Position
 
 

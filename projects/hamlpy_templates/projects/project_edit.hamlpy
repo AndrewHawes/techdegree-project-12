@@ -81,7 +81,7 @@
                       %button.btn.btn-sm.btn-danger(type='button' data-formset-delete-button) Remove
               - endescapescript
             .text-center
-              %button.btn.btn-outline-primary.mt-3(type='button' data-formset-add) Add Another Position
+              %button.btn.btn-outline-primary.mt-3(type='button' data-formset-add) Add New Position
             
             %script
               :plain
