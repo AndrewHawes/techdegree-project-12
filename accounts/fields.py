@@ -45,7 +45,6 @@ class CustomModelChoiceField(ModelChoiceField):
 
     def __deepcopy__(self, memo):
         result = super(ChoiceField, self).__deepcopy__(memo)
-        assert (result.queryset is self.queryset)
         return result
 
 
