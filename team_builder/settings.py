@@ -26,7 +26,7 @@ SECRET_KEY = '7p6^4n4_yk&h3)=bt*-k%4$!doy&_r%sy4*8g)2*th@i22*ew%'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-DEBUG_TOOLBAR = True
+DEBUG_TOOLBAR = False
 
 ALLOWED_HOSTS = []
 
