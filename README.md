@@ -29,7 +29,7 @@ or deny the person asking to join.
     - `python manage.py loaddata exampledata.json`
 7. Run the project.
     - `manage.py runserver`
-    - Go to [127.0.0.1:8000](127.0.0.1:8000) in your browser.
+    - Go to [127.0.0.1:8000](http://127.0.0.1:8000) in your browser.
 
 The example data loads multiple user accounts.
 Use the following to log into an administrator account with a completed
