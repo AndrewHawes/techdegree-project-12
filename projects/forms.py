@@ -2,7 +2,6 @@ from django import forms
 from django.forms import inlineformset_factory
 from djangoformsetjs.utils import formset_media_js
 
-from accounts.fields import CustomModelMultipleChoiceField
 from accounts.models import Skill
 from .models import Project, Position
 
@@ -33,8 +32,8 @@ class PositionForm(forms.ModelForm):
     # becomes a problem with any future changes, but it shouldn't affect
     # anything here.
 
-    # skills = forms.ModelMultipleChoiceField(queryset=Skill.objects.all())
-    skills = CustomModelMultipleChoiceField(queryset=Skill.objects.all())
+    skills = forms.ModelMultipleChoiceField(queryset=Skill.objects.all())
+    # skills = CustomModelMultipleChoiceField(queryset=Skill.objects.all())
 
     class Meta:
         model = Position
